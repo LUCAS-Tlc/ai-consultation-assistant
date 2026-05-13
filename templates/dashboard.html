@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — AI 咨询助手</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">AI 咨询助手</a>
+            <div class="nav-links">
+                <a href="/">提交咨询</a>
+                <a href="/dashboard" class="active">Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="page-header">
+            <div>
+                <h1>Dashboard</h1>
+                <p class="subtitle">所有客户咨询一览</p>
+            </div>
+            <div class="header-actions">
+                <a href="/export" class="btn-secondary">导出 CSV</a>
+                <form method="POST" action="/generate-demo" style="display:inline">
+                    <button type="submit" class="btn-secondary">生成 Demo 数据</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-number">{{ stats.total }}</div>
+                <div class="stat-label">Total</div>
+            </div>
+            <div class="stat-card stat-high">
+                <div class="stat-number">{{ stats.high }}</div>
+                <div class="stat-label">High Intent</div>
+            </div>
+            <div class="stat-card stat-medium">
+                <div class="stat-number">{{ stats.medium }}</div>
+                <div class="stat-label">Medium Intent</div>
+            </div>
+            <div class="stat-card stat-low">
+                <div class="stat-number">{{ stats.low }}</div>
+                <div class="stat-label">Low Intent</div>
+            </div>
+        </div>
+
+        <div class="filter-bar">
+            <span>Filter by intent:</span>
+            <a href="/dashboard" class="filter-chip {% if current_filter == '' %}active{% endif %}">All</a>
+            <a href="/dashboard?intent=High" class="filter-chip chip-high {% if current_filter == 'High' %}active{% endif %}">High</a>
+            <a href="/dashboard?intent=Medium" class="filter-chip chip-medium {% if current_filter == 'Medium' %}active{% endif %}">Medium</a>
+            <a href="/dashboard?intent=Low" class="filter-chip chip-low {% if current_filter == 'Low' %}active{% endif %}">Low</a>
+        </div>
+
+        {% if customers %}
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Company</th>
+                    <th>Need</th>
+                    <th>Intent</th>
+                    <th>Follow-up</th>
+                    <th>Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in customers %}
+                <tr>
+                    <td><a href="/customer/{{ c.id }}">{{ c.name }}</a></td>
+                    <td>{{ c.company or '-' }}</td>
+                    <td class="need-cell">{{ c.need or '-' }}</td>
+                    <td>
+                        <span class="badge badge-{{ c.intent_level|lower if c.intent_level else 'low' }}">
+                            {{ c.intent_level or 'N/A' }}
+                        </span>
+                    </td>
+                    <td>{{ c.follow_up_date or '-' }}</td>
+                    <td class="date-cell">{{ c.created_at[:10] if c.created_at else '-' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            <p>暂无客户数据</p>
+            <p>点击"生成 Demo 数据"快速体验，或前往<a href="/">提交表单</a>添加客户。</p>
+        </div>
+        {% endif %}
+    </main>
+</body>
+</html>

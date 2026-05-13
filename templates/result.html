@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分析结果 — AI 咨询助手</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">AI 咨询助手</a>
+            <div class="nav-links">
+                <a href="/">提交咨询</a>
+                <a href="/dashboard">Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="result-header">
+            <h1>AI 分析完成</h1>
+            <span class="badge badge-{{ customer.intent_level|lower }}">
+                {{ customer.intent_level }}
+            </span>
+        </div>
+        <p class="subtitle">{{ customer.intent_reason }}</p>
+
+        <div class="result-grid">
+            <div class="card">
+                <h2>客户信息</h2>
+                <table class="info-table">
+                    <tr><td class="label">Name</td><td>{{ customer.name }}</td></tr>
+                    <tr><td class="label">Email</td><td>{{ customer.email }}</td></tr>
+                    {% if customer.company %}
+                    <tr><td class="label">Company</td><td>{{ customer.company }}</td></tr>
+                    {% endif %}
+                    {% if customer.need %}
+                    <tr><td class="label">Need</td><td>{{ customer.need }}</td></tr>
+                    {% endif %}
+                    {% if customer.budget %}
+                    <tr><td class="label">Budget</td><td>{{ customer.budget }}</td></tr>
+                    {% endif %}
+                    {% if customer.timeline %}
+                    <tr><td class="label">Timeline</td><td>{{ customer.timeline }}</td></tr>
+                    {% endif %}
+                    {% if customer.notes %}
+                    <tr><td class="label">Notes</td><td>{{ customer.notes }}</td></tr>
+                    {% endif %}
+                </table>
+            </div>
+
+            <div class="card">
+                <h2>AI 需求分析</h2>
+                <p>{{ customer.ai_analysis }}</p>
+            </div>
+
+            <div class="card">
+                <h2>回复邮件草稿</h2>
+                <div class="email-toolbar">
+                    <button class="btn-secondary" onclick="copyEmail()">一键复制</button>
+                </div>
+                <pre class="email-body" id="emailContent">{{ customer.email_draft }}</pre>
+            </div>
+
+            <div class="card">
+                <h2>Follow-up 日期</h2>
+                <p class="followup-date">{{ customer.follow_up_date }}</p>
+            </div>
+        </div>
+
+        <div class="result-actions">
+            <a href="/" class="btn-primary">提交新咨询</a>
+            <a href="/dashboard" class="btn-secondary">查看 Dashboard</a>
+            <a href="/customer/{{ customer.id }}" class="btn-secondary">查看详情</a>
+        </div>
+    </main>
+
+    <script>
+    function copyEmail() {
+        const email = document.getElementById('emailContent').textContent;
+        navigator.clipboard.writeText(email).then(() => {
+            const btn = event.target;
+            btn.textContent = '已复制';
+            setTimeout(() => btn.textContent = '一键复制', 2000);
+        });
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客户咨询表单 — AI 咨询助手</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">AI 咨询助手</a>
+            <div class="nav-links">
+                <a href="/">提交咨询</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h1>客户咨询表单</h1>
+        <p class="subtitle">请填写以下信息，AI 将自动分析客户意向并生成回复邮件</p>
+        <form method="POST" action="/submit" class="inquiry-form">
+            <div class="form-group">
+                <label for="name">Name <span class="required">*</span></label>
+                <input type="text" id="name" name="name" required placeholder="客户姓名">
+            </div>
+            <div class="form-group">
+                <label for="email">Email <span class="required">*</span></label>
+                <input type="email" id="email" name="email" required placeholder="客户邮箱">
+            </div>
+            <div class="form-group">
+                <label for="company">Company</label>
+                <input type="text" id="company" name="company" placeholder="公司名称">
+            </div>
+            <div class="form-group">
+                <label for="need">Need</label>
+                <textarea id="need" name="need" rows="3" placeholder="客户需求描述"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="budget">Budget</label>
+                <input type="text" id="budget" name="budget" placeholder="预算范围">
+            </div>
+            <div class="form-group">
+                <label for="timeline">Timeline</label>
+                <input type="text" id="timeline" name="timeline" placeholder="时间线">
+            </div>
+            <div class="form-group">
+                <label for="notes">Notes</label>
+                <textarea id="notes" name="notes" rows="2" placeholder="其他备注"></textarea>
+            </div>
+            <button type="submit" class="btn-primary">提交咨询</button>
+        </form>
+        <p class="admin-link"><a href="/dashboard">内部管理</a></p>
+    </main>
+</body>
+</html>
